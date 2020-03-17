@@ -12,6 +12,11 @@ def setup_db(app):
     casting_db.app = app
     casting_db.init_app(app)
 
+# Creating function to re-initialize database when prompted
+def db_drop_and_create_all():
+    casting_db.drop_all()
+    casting_db.create_all()
+
 # Creating a Movie class object to hold / update information about movies
 class Movie(casting_db.Model):
     # Setting the name of the table
