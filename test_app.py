@@ -7,18 +7,16 @@ from flask_sqlalchemy import SQLAlchemy
 from flask import Flask
 
 # Importing objects from other files in the repo
-from models import Actor, Movie, setup_db, casting_db
+from models import Actor, Movie, setup_db
 from app import create_app
 
 # Creating a Unit Test class object to hold all our unit tests
 class CastingTestCase(unittest.TestCase):
     # Establishing function to initialize items to perform tests
-    def setup_for_tests(self):
+    def setUp(self):
         self.app = create_app()
         self.client = self.app.test_client
         setup_db(self.app)
-        casting_db.drop_all()
-        casting_db.create_all()
 
         self.test_movie = {
             'title': 'Some Movie Title',
@@ -31,6 +29,15 @@ class CastingTestCase(unittest.TestCase):
             'gender': 'female',
             'movie_id': '1'
         }
+
+        with self.app.app_context():
+            self.db = SQLAlchemy()
+            self.db.init_app(self.app)
+            self.db.create_all()
+
+    # Passing over teardown
+    def tearDown(self):
+        pass
 
     # GET Endpoint Tests
     # -------------------------------------------------------------------------
