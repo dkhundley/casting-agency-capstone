@@ -138,17 +138,20 @@ def create_app(test_config=None):
         # Querying movie by provided movie_id
         movie = Movie.query.filter(Movie.id == movie_id)
 
-        try:
-            # Deleting movie from database
-            movie.delete()
+        if movie:
+            try:
+                # Deleting movie from database
+                movie.delete()
 
-            # Returning success information
-            return jsonify({
-                'success': True,
-                'deleted': movie_id
-            })
-        except:
-            abort(422)
+                # Returning success information
+                return jsonify({
+                    'success': True,
+                    'deleted': movie_id
+                })
+            except:
+                abort(422)
+        else:
+            abort(404)
 
     # Creating endpoint to delete an actor by provided actor_id
     @app.route('/actors/delete/<int:actor_id>', methods = ['DELETE'])
@@ -157,17 +160,20 @@ def create_app(test_config=None):
         # Querying actor by provided actor_id
         actor = Actor.query.filter(Actor.id == actor_id)
 
-        try:
-            # Deleting actor from database
-            actor.delete()
+        if actor:
+            try:
+                # Deleting actor from database
+                actor.delete()
 
-            # Returning success information
-            return jsonify({
-                'success': True,
-                'deleted': actor_id
-            })
-        except:
-            abort(422)
+                # Returning success information
+                return jsonify({
+                    'success': True,
+                    'deleted': actor_id
+                })
+            except:
+                abort(422)
+        else:
+            abort(404)
 
     # PATCH (Update) Endpoints
     # -------------------------------------------------------------------------
