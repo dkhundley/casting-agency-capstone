@@ -12,7 +12,7 @@ def setup_db(app):
     casting_db.app = app
     casting_db.init_app(app)
 
-# Creating a Movies class object to hold / update information about movies
+# Creating a Movie class object to hold / update information about movies
 class Movie(casting_db.Model):
     # Setting the name of the table
     __tablename__ = 'movies'
@@ -20,10 +20,10 @@ class Movie(casting_db.Model):
     # Setting attributes of the table
     id = casting_db.Column(casting_db.Integer, primary_key = True)
     title = casting_db.Column(casting_db.String)
-    release_date = db.Column(db.Date)
+    release_date = casting_db.Column(db.Date)
 
     # Connecting actors from the 'actors' table to the respective movie
-    actors = db.relationship('Actor', backref = 'movies')
+    actors = casting_db.relationship('Actor', backref = 'movies')
 
     # Creating an insert function
     def insert(self):
@@ -46,4 +46,42 @@ class Movie(casting_db.Model):
             'title': self.title,
             'release_date': self.release_date,
             'actors': self.actors
+        }
+
+# Creating an Actor class object to hold / update information about actors & actresses
+class Actor(casting_db.Model):
+    # Setting the name of the table
+    __tablename__ = 'actors'
+
+    # Setting the attributes of the table
+    id = casting_db.Column(casting_db.Integer, primary_key = True)
+    name = casting_db.Column(casting_db.String)
+    age = casting_db.Column(casting_db.Integer)
+    gender = casting_db.Column(casting_db.String)
+
+    # Connecting movie to the respective actors from the movies table
+    movie_id = casting_db.Column(casting_db.Integer, casting_db.ForeignKey('movies.id'), nullable = False)
+
+    # Creating an insert function
+    def insert(self):
+        casting_db.session.add(self)
+        casting_db.session.commit(self)
+
+    # Creating an update function
+    def update(self):
+        casting_db.session.commit()
+
+    # Creating a delete function
+    def delete(self):
+        casting_db.session.delete(self)
+        casting_db.session.commit()
+
+    # Creating a formatting function
+    def format(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'age': self.age,
+            'gender': self.gender,
+            'movie_id': self.movie_id
         }
