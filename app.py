@@ -8,6 +8,7 @@ from flask_cors import CORS
 from auth import AuthError, requires_auth
 from models import setup_db, Movie, Actor, casting_db
 
+
 # Defining everything for our Flask application
 def create_app(test_config=None):
     # create and configure the app
@@ -16,6 +17,17 @@ def create_app(test_config=None):
 
     # Instantiating the app with the database from the models file
     setup_db(app)
+
+    # Adding Access control headers
+    @app.after_request
+    def after_request(response):
+        response.headers.add('Access-Control-Allow-Headers',
+                             'Content-Type,Authozation,true')
+        response.headers.add('Access-Control-Allow-Methods',
+                             'GET,PUT,POST,DELETE,PATCH,OPTIONS')
+        response.headers.add('Access-Control-Allow-Origin', '*')
+
+        return response
 
     # GET Endpoints
     # -------------------------------------------------------------------------
@@ -33,10 +45,6 @@ def create_app(test_config=None):
 
         # Formatting the returned movie results
         movies = [movie.format() for movie in movies]
-
-        # Formatting the actors field within movies
-        for movie in movies:
-          movie['actor'] = [actor.format() for actor in movie['actors']]
 
         # Returining movie information
         return jsonify({
@@ -69,28 +77,28 @@ def create_app(test_config=None):
 
     # Creating an endpoint to allow a new movie to be added
     @app.route('/movies/create', methods = ['POST'])
-    @requires_auth('add:movies')
+    #@requires_auth('add:movies')
     def add_movie():
         # Getting information from request body
         body = request.get_json()
 
-        # Checking to see if proper info is present
-        if not ('title' in body and 'release_date' in body):
-            abort(422)
-
         # Extracting information from body
         title = body.get('title')
-        release_date = body.get('release_date')
+        release_year = body.get('release_year')
+
+        # Checking to see if proper info is present
+        if not (title and release_year):
+            abort(422)
 
         try:
             # Adding new movie object with request body info
-            movie = Movie(title = title, release_date = release_date)
-            movie.insert()
+            new_movie = Movie(title = title, release_year = release_year)
+            new_movie.insert()
 
             # Returning success information
             return jsonify({
                 'success': True,
-                'movie_id': movie.id,
+                'movie_id': new_movie.id,
             })
         except:
             abort(422)
@@ -136,7 +144,7 @@ def create_app(test_config=None):
     @requires_auth('delete:movies')
     def delete_movie(movie_id):
         # Querying movie by provided movie_id
-        movie = Movie.query.filter(Movie.id == movie_id)
+        movie = Movie.query.get(movie_id)
 
         if movie:
             try:
@@ -158,7 +166,7 @@ def create_app(test_config=None):
     @requires_auth('delete:actors')
     def delete_actor(actor_id):
         # Querying actor by provided actor_id
-        actor = Actor.query.filter(Actor.id == actor_id)
+        actor = Actor.query.get(actor_id)
 
         if actor:
             try:
@@ -183,7 +191,7 @@ def create_app(test_config=None):
     @requires_auth('update:movies')
     def update_movie(movie_id):
         # Querying movie by provided movie_id
-        movie = Movie.query.filter(Movie.id == movie_id)
+        movie = Movie.query.get(movie_id)
 
         # Checking to see if movie info is present
         if movie:
@@ -193,13 +201,13 @@ def create_app(test_config=None):
 
                 # Extracting information from body
                 title = body.get('title')
-                release_date = body.get('release_date')
+                release_year = body.get('release_year')
 
                 # Updating movie information if new attribute information is present
                 if title:
                     movie.title = title
-                if release_date:
-                    movie.release_date = release_date
+                if release_year:
+                    movie.release_year = release_year
 
                 # Updating movie information formally in database
                 movie.update()
@@ -222,7 +230,7 @@ def create_app(test_config=None):
     @requires_auth('update:actors')
     def update_actors(actor_id):
         # Querying actor by provided actor_id
-        actor = Actor.query.filter(Actor.id == actor_id)
+        actor = Actor.query.get(actor_id)
 
         # Checking to see if actor info is present
         if actor:
@@ -286,7 +294,6 @@ def create_app(test_config=None):
             'error': x.status_code,
             'message': x.error
         }), 401
-
 
     return app
 

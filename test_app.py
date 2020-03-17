@@ -2,7 +2,6 @@
 import os
 import unittest
 import json
-import datetime
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask
 
@@ -20,19 +19,20 @@ class CastingTestCase(unittest.TestCase):
 
         self.test_movie = {
             'title': 'Some Movie Title',
-            'release_date': datetime.date(2020, 3, 17)
+            'release_year': 2020
         }
 
         self.test_actor = {
             'name': 'Jane Doe',
             'age': 22,
             'gender': 'female',
-            'movie_id': '1'
+            'movie_id': 1
         }
 
         with self.app.app_context():
             self.db = SQLAlchemy()
             self.db.init_app(self.app)
+            self.db.drop_all()
             self.db.create_all()
 
     # Passing over teardown
@@ -151,7 +151,7 @@ class CastingTestCase(unittest.TestCase):
     # Creating a test to delete a movie using the DELETE endpoint
     def test_delete_movie(self):
         # Calling delete endpoint with valid movie_id
-        res = self.client().delete('/movies/delete/1')
+        res = self.client().delete('/movies/delete/2')
         # Transforming body response into JSON
         data = json.loads(res.data)
 
@@ -204,7 +204,7 @@ class CastingTestCase(unittest.TestCase):
     # Creating a test to update a movie with new info
     def test_update_movie(self):
         # Calling patch endpoint with valid movie_id
-        res = self.client().patch('/movies/update/1', json = {'title': 'Updated movie title'})
+        res = self.client().patch('/movies/update/3', json = {'title': 'Updated movie title'})
         # Transforming body response into JSON
         data = json.loads(res.data)
 
@@ -229,7 +229,7 @@ class CastingTestCase(unittest.TestCase):
     # Creating a test to update an actor with new info
     def test_update_actor(self):
         # Calling patch endpoint with valid actor_id
-        res = self.client().patch('/actors/update/1', json = {'name': 'Updated Name'})
+        res = self.client().patch('/actors/update/2', json = {'name': 'Updated Name'})
         # Transforming body response into JSON
         data = json.loads(res.data)
 

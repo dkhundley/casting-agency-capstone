@@ -1,21 +1,20 @@
 # Importing the necessary libraries
 import os
+from sqlalchemy import Column, String, Integer
 from flask_sqlalchemy import SQLAlchemy
+
+database_name = "casting_test"
+database_path = "postgres://{}/{}".format('localhost:5432', database_name)
 
 # Instantiating database as an SQLAlchemy object
 casting_db = SQLAlchemy()
 
 # Setting up the database for the Flask app
-def setup_db(app):
-    app.config["SQLALCHEMY_DATABASE_URI"] = os.environ['DATABASE_URL']
+def setup_db(app, database_path = database_path):
+    app.config["SQLALCHEMY_DATABASE_URI"] = database_path
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     casting_db.app = app
     casting_db.init_app(app)
-
-# Creating function to re-initialize database when prompted
-def db_drop_and_create_all():
-    casting_db.drop_all()
-    casting_db.create_all()
 
 # Creating a Movie class object to hold / update information about movies
 class Movie(casting_db.Model):
@@ -23,9 +22,9 @@ class Movie(casting_db.Model):
     __tablename__ = 'movies'
 
     # Setting attributes of the table
-    id = casting_db.Column(casting_db.Integer, primary_key = True)
-    title = casting_db.Column(casting_db.String)
-    release_date = casting_db.Column(db.Date)
+    id = Column(Integer(), primary_key = True)
+    title = Column(String())
+    release_year = Column(Integer())
 
     # Connecting actors from the 'actors' table to the respective movie
     actors = casting_db.relationship('Actor', backref = 'movies')
@@ -33,7 +32,7 @@ class Movie(casting_db.Model):
     # Creating an insert function
     def insert(self):
         casting_db.session.add(self)
-        casting_db.session.commit(self)
+        casting_db.session.commit()
 
     # Creating an update function
     def update(self):
@@ -49,8 +48,7 @@ class Movie(casting_db.Model):
         return {
             'id': self.id,
             'title': self.title,
-            'release_date': self.release_date,
-            'actors': self.actors
+            'release_year': self.release_year
         }
 
 # Creating an Actor class object to hold / update information about actors & actresses
@@ -59,10 +57,10 @@ class Actor(casting_db.Model):
     __tablename__ = 'actors'
 
     # Setting the attributes of the table
-    id = casting_db.Column(casting_db.Integer, primary_key = True)
-    name = casting_db.Column(casting_db.String)
-    age = casting_db.Column(casting_db.Integer)
-    gender = casting_db.Column(casting_db.String)
+    id = Column(Integer(), primary_key = True)
+    name = Column(String())
+    age = Column(Integer())
+    gender = Column(String())
 
     # Connecting movie to the respective actors from the movies table
     movie_id = casting_db.Column(casting_db.Integer, casting_db.ForeignKey('movies.id'), nullable = False)
@@ -70,7 +68,7 @@ class Actor(casting_db.Model):
     # Creating an insert function
     def insert(self):
         casting_db.session.add(self)
-        casting_db.session.commit(self)
+        casting_db.session.commit()
 
     # Creating an update function
     def update(self):
