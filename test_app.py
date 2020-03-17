@@ -180,7 +180,7 @@ class CastingTestCase(unittest.TestCase):
 
     # Creating a test to verify correct error is thrown when invalid actor_id is passed to delete endpoint
     def test_delete_actor_fail(self):
-        # Calling delete endpoint with invalid movie_id
+        # Calling delete endpoint with invalid actor_id
         res = self.client().delete('/actors/delete/100000000')
         # Transforming body response into JSON
         data = json.loads(res.data)
@@ -190,3 +190,61 @@ class CastingTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['error'], 404)
         self.assertEqual(data['message'], 'not found')
+
+    # PATCH (Update) Endpoint Tests
+    # -------------------------------------------------------------------------
+
+    # Creating a test to update a movie with new info
+    def test_update_movie(self):
+        # Calling patch endpoint with valid movie_id
+        res = self.client().patch('/movies/update/1', json = {'title': 'Updated movie title'})
+        # Transforming body response into JSON
+        data = json.loads(res.data)
+
+        # Asserting that tests are valid
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['movie_id'])
+
+    # Creating a test to throw proper error when invalid movie_id is passed to PATCH endpoint
+    def test_update_movie_fail(self):
+        # Calling patch endpoint with invalid movie_id
+        res = self.client().patch('/movies/update/100000000', json = {'title': 'Updated movie title'})
+        # Transforming body response into JSON
+        data = json.loads(res.data)
+
+        # Asserting that tests are valid
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['error'], 404)
+        self.assertEqual(data['message'], 'not found')
+
+    # Creating a test to update an actor with new info
+    def test_update_actor(self):
+        # Calling patch endpoint with valid actor_id
+        res = self.client().patch('/actors/update/1', json = {'name': 'Updated Name'})
+        # Transforming body response into JSON
+        data = json.loads(res.data)
+
+        # Asserting that tests are valid
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['actor_id'])
+
+    # Creating a test to throw proper error when invalid actor_id is passed to PATCH endpoint
+    def test_update_actor_fail(self):
+        # Calling patch endpoint with invalid actor_id
+        res = self.client().patch('/actors/update/100000000', json = {'name': 'Updated Name'})
+        # Transforming body response into JSON
+        data = json.loads(res.data)
+
+        # Asserting that tests are valid
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['error'], 404)
+        self.assertEqual(data['message'], 'not found')
+
+
+# Make the tests conveniently executable
+if __name__ == '__main__':
+    unittest.main()
