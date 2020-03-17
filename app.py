@@ -132,7 +132,7 @@ def create_app(test_config=None):
     # -------------------------------------------------------------------------
 
     # Creating endpoint to delete a movie by provided movie_id
-    @app.route('/movies/delete/<int:movie_id', methods = ['DELETE'])
+    @app.route('/movies/delete/<int:movie_id>', methods = ['DELETE'])
     @requires_auth('delete:movies')
     def delete_movie(movie_id):
         # Querying movie by provided movie_id
@@ -151,14 +151,14 @@ def create_app(test_config=None):
             abort(422)
 
     # Creating endpoint to delete an actor by provided actor_id
-    @app.route('/actors/delete/<int:actor_id', methods = ['DELETE'])
+    @app.route('/actors/delete/<int:actor_id>', methods = ['DELETE'])
     @requires_auth('delete:actors')
     def delete_actor(actor_id):
-        # Querying movie by provided movie_id
+        # Querying actor by provided actor_id
         actor = Actor.query.filter(Actor.id == actor_id)
 
         try:
-            # Deleting movie from database
+            # Deleting actor from database
             actor.delete()
 
             # Returning success information
@@ -168,6 +168,118 @@ def create_app(test_config=None):
             })
         except:
             abort(422)
+
+    # PATCH (Update) Endpoints
+    # -------------------------------------------------------------------------
+
+    # Creating an endpoint to update information about a specific movie
+    @app.route('/movies/update/<int:movie_id>', methods = ['PATCH'])
+    @requires_auth('update:movies')
+    def update_movie(movie_id):
+        # Querying movie by provided movie_id
+        movie = Movie.query.filter(Movie.id == movie_id)
+
+        # Checking to see if movie info is present
+        if movie:
+            try:
+                # Getting information from request body
+                body = request.get_json()
+
+                # Extracting information from body
+                title = body.get('title')
+                release_date = body.get('release_date')
+
+                # Updating movie information if new attribute information is present
+                if title:
+                    movie.title = title
+                if release_date:
+                    movie.release_date = release_date
+
+                # Updating movie information formally in database
+                movie.update()
+
+                # Returning success information
+                return jsonify({
+                    'success': True,
+                    'movie_id': movie.id
+                })
+            # Raising exception if error updating movie
+            except:
+                abort(422)
+        # Raising exception if movie could not be found
+        else:
+            abort(404)
+
+
+    # Creating an endpoint to update actor information with new attribute info
+    @app.route('/actors/update/<int:actor_id>', methods = ['PATCH'])
+    @requires_auth('update:actors')
+    def update_actors(actor_id):
+        # Querying actor by provided actor_id
+        actor = Actor.query.filter(Actor.id == actor_id)
+
+        # Checking to see if actor info is present
+        if actor:
+            try:
+                # Getting information from request body
+                body = request.get_json()
+
+                # Extracting information from body
+                name = body.get('name')
+                age = body.get('age')
+                gender = body.get('gender')
+                movie_id = body.get('movie_id')
+
+                # Updating actor information if new attribute information is present
+                if name:
+                    actor.name = name
+                if age:
+                    actor.age = age
+                if gender:
+                    actor.gender = gender
+                if movie_id:
+                    actor.movie_id = movie_id
+
+                # Updating actor information formally in database
+                actor.update()
+
+                # Returning success information
+                return jsonify({
+                    'success': True,
+                    'actor_id': actor.id
+                })
+            # Raising exception if error updating actor
+            except:
+                abort(422)
+        # Raising exception if actor could not be found
+        else:
+            abort(404)
+
+    # Error Handling
+    # -------------------------------------------------------------------------
+    @app.errorhandler(422)
+    def unprocessable(error):
+        return jsonify({
+                        "success": False,
+                        "error": 422,
+                        "message": "unprocessable"
+                        }), 422
+
+    @app.errorhandler(404)
+    def not_found(error):
+        return jsonify({
+                        "success": False,
+                        "error": 404,
+                        "message": "not found"
+                        }), 404
+
+    @app.errorhandler(AuthError)
+    def handle_auth_errors(x):
+        return jsonify({
+            'success': False,
+            'error': x.status_code,
+            'message': x.error
+        }), 401
 
 
     return app
