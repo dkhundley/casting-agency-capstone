@@ -3,6 +3,7 @@ import os
 from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+import json
 
 # Importing objects from other files in this repo
 from auth import AuthError, requires_auth
@@ -13,20 +14,16 @@ from models import setup_db, Movie, Actor, casting_db
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__)
-    CORS(app, resources = {r"/api/": {"origins": "*"}})
+    CORS(app, resources = {r'/api/': {'origins': '*'}})
 
     # Instantiating the app with the database from the models file
     setup_db(app)
 
-    # Adding Access control headers
+    # Adding proper header info to response
     @app.after_request
     def after_request(response):
-        response.headers.add('Access-Control-Allow-Headers',
-                             'Content-Type,Authozation,true')
-        response.headers.add('Access-Control-Allow-Methods',
-                             'GET,PUT,POST,DELETE,PATCH,OPTIONS')
-        response.headers.add('Access-Control-Allow-Origin', '*')
-
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization, True')
+        response.headers.add('Access-Control-Allow-Methods', 'GET, PATCH, POST, DELETE, OPTIONS')
         return response
 
     # GET Endpoints
@@ -35,7 +32,7 @@ def create_app(test_config=None):
     # Creating an endpoint to view movie information
     @app.route('/movies', methods = ['GET'])
     @requires_auth('view:movies')
-    def get_movies():
+    def get_movies(jwt):
         # Querying all the movies
         movies = Movie.query.all()
 
@@ -55,7 +52,7 @@ def create_app(test_config=None):
     # Creating an endpoint to view actor information
     @app.route('/actors', methods = ['GET'])
     @requires_auth('view:actors')
-    def get_actors():
+    def get_actors(jwt):
         # Querying all the actors
         actors = Actor.query.all()
 
@@ -77,8 +74,8 @@ def create_app(test_config=None):
 
     # Creating an endpoint to allow a new movie to be added
     @app.route('/movies/create', methods = ['POST'])
-    #@requires_auth('add:movies')
-    def add_movie():
+    @requires_auth('add:movies')
+    def add_movie(jwt):
         # Getting information from request body
         body = request.get_json()
 
@@ -106,19 +103,19 @@ def create_app(test_config=None):
     # Creating an endpoint to allow a new actor to be added
     @app.route('/actors/create', methods = ['POST'])
     @requires_auth('add:actors')
-    def add_actor():
+    def add_actor(jwt):
         # Getting information from request body
         body = request.get_json()
-
-        # Checking to see if proper info is present
-        if not ('name' in body and 'age' in body and 'gender' in body and 'movie_id' in body):
-            abort(422)
 
         # Extracting information from the body
         name = body.get('name')
         age = body.get('age')
         gender = body.get('gender')
         movie_id = body.get('movie_id')
+
+        # Checking to see if proper info is present
+        if not (name and age and gender and movie_id):
+            abort(422)
 
         try:
             # Adding new actor object with request body info
@@ -142,7 +139,7 @@ def create_app(test_config=None):
     # Creating endpoint to delete a movie by provided movie_id
     @app.route('/movies/delete/<int:movie_id>', methods = ['DELETE'])
     @requires_auth('delete:movies')
-    def delete_movie(movie_id):
+    def delete_movie(jwt, movie_id):
         # Querying movie by provided movie_id
         movie = Movie.query.get(movie_id)
 
@@ -164,7 +161,7 @@ def create_app(test_config=None):
     # Creating endpoint to delete an actor by provided actor_id
     @app.route('/actors/delete/<int:actor_id>', methods = ['DELETE'])
     @requires_auth('delete:actors')
-    def delete_actor(actor_id):
+    def delete_actor(jwt, actor_id):
         # Querying actor by provided actor_id
         actor = Actor.query.get(actor_id)
 
@@ -189,7 +186,7 @@ def create_app(test_config=None):
     # Creating an endpoint to update information about a specific movie
     @app.route('/movies/update/<int:movie_id>', methods = ['PATCH'])
     @requires_auth('update:movies')
-    def update_movie(movie_id):
+    def update_movie(jwt, movie_id):
         # Querying movie by provided movie_id
         movie = Movie.query.get(movie_id)
 
@@ -228,7 +225,7 @@ def create_app(test_config=None):
     # Creating an endpoint to update actor information with new attribute info
     @app.route('/actors/update/<int:actor_id>', methods = ['PATCH'])
     @requires_auth('update:actors')
-    def update_actors(actor_id):
+    def update_actors(jwt, actor_id):
         # Querying actor by provided actor_id
         actor = Actor.query.get(actor_id)
 
