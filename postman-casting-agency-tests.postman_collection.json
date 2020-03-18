@@ -49,7 +49,12 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    'title': 'Some Movie Title',\n    'release_date': 2020-03-03\n}"
+							"raw": "{\n    \"title\": \"Some Movie Title\",\n    \"release_year\": 2020\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
 							"raw": "{{host}}/movies/create",
@@ -71,7 +76,12 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    'name': 'Jane Doe',\n    'age': 22,\n    'gender': 'female',\n    'movie_id': '1'\n}"
+							"raw": "{\n    \"name\": \"Jane Doe\",\n    \"age\": 22,\n    \"gender\": \"female\",\n    \"movie_id\": \"1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
 							"raw": "{{host}}/actors/create",
@@ -131,7 +141,12 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t'title': 'Updated movie title'\n}"
+							"raw": "{\n\t\"title\": \"Updated movie title\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
 							"raw": "{{host}}/movies/update/1",
@@ -154,7 +169,12 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t'name': 'Updated Name'\n}"
+							"raw": "{\n\t\"name\": \"Updated Name\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
 							"raw": "{{host}}/actors/update/1",
@@ -249,7 +269,12 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    'title': 'Some Movie Title',\n    'release_date': 2020-03-03\n}"
+							"raw": "{\n    \"title\": \"Some Movie Title\",\n    \"release_year\": 2020\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
 							"raw": "{{host}}/movies/create",
@@ -271,7 +296,12 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    'name': 'Jane Doe',\n    'age': 22,\n    'gender': 'female',\n    'movie_id': '1'\n}"
+							"raw": "{\n    \"name\": \"Jane Doe\",\n    \"age\": 22,\n    \"gender\": \"female\",\n    \"movie_id\": \"1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
 							"raw": "{{host}}/actors/create",
@@ -331,7 +361,12 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t'title': 'Updated movie title'\n}"
+							"raw": "{\n\t\"title\": \"Updated movie title\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
 							"raw": "{{host}}/movies/update/1",
@@ -354,7 +389,12 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t'name': 'Updated Name'\n}"
+							"raw": "{\n\t\"name\": \"Updated Name\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
 							"raw": "{{host}}/actors/update/1",
@@ -449,7 +489,12 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    'title': 'Some Movie Title',\n    'release_date': 2020-03-03\n}"
+							"raw": "{\n    \"title\": \"Some Movie Title\",\n    \"release_year\": 2020\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
 							"raw": "{{host}}/movies/create",
@@ -471,7 +516,12 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    'name': 'Jane Doe',\n    'age': 22,\n    'gender': 'female',\n    'movie_id': '1'\n}"
+							"raw": "{\n    \"name\": \"Jane Doe\",\n    \"age\": 22,\n    \"gender\": \"female\",\n    \"movie_id\": \"1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
 							"raw": "{{host}}/actors/create",
@@ -487,84 +537,94 @@
 					"response": []
 				},
 				{
-					"name": "/movies/delete/1",
+					"name": "/movies/delete/2",
 					"request": {
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{host}}/movies/delete/1",
+							"raw": "{{host}}/movies/delete/2",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"movies",
 								"delete",
-								"1"
+								"2"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "/actors/delete/1",
+					"name": "/actors/delete/2",
 					"request": {
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{host}}/actors/delete/1",
+							"raw": "{{host}}/actors/delete/2",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"actors",
 								"delete",
-								"1"
+								"2"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "/movies/update/1",
+					"name": "/movies/update/2",
 					"request": {
 						"method": "PATCH",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t'title': 'Updated movie title'\n}"
+							"raw": "{\n\t\"title\": \"Updated movie title\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
-							"raw": "{{host}}/movies/update/1",
+							"raw": "{{host}}/movies/update/2",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"movies",
 								"update",
-								"1"
+								"2"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "/actors/update/1",
+					"name": "/actors/update/2",
 					"request": {
 						"method": "PATCH",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t'name': 'Updated Name'\n}"
+							"raw": "{\n\t\"name\": \"Updated Name\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
-							"raw": "{{host}}/actors/update/1",
+							"raw": "{{host}}/actors/update/2",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"actors",
 								"update",
-								"1"
+								"2"
 							]
 						}
 					},
@@ -576,7 +636,7 @@
 				"bearer": [
 					{
 						"key": "token",
-						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlJEZ3pNemd5TlRkRk5EWkdSakZHTVVNMk4wUTBNREF5TlVKQ1JrVXhSRU16UVRBNU9EbEdRZyJ9.eyJpc3MiOiJodHRwczovL2RraHVuZGxleS5hdXRoMC5jb20vIiwic3ViIjoiZ29vZ2xlLW9hdXRoMnwxMDUwNTU1OTY4NzQ1NDA2MzkxNjMiLCJhdWQiOlsiY2FzdGluZyIsImh0dHBzOi8vZGtodW5kbGV5LmF1dGgwLmNvbS91c2VyaW5mbyJdLCJpYXQiOjE1ODQ1MzIzNzQsImV4cCI6MTU4NDUzOTU3NCwiYXpwIjoiWHNGWjhzWnMxYzU2bVp6MVdmbmpjMmc3RXBkOGJJVjIiLCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIGVtYWlsIiwicGVybWlzc2lvbnMiOlsiYWRkOmFjdG9ycyIsImFkZDptb3ZpZXMiLCJkZWxldGU6YWN0b3JzIiwiZGVsZXRlOm1vdmllcyIsInVwZGF0ZTphY3RvcnMiLCJ1cGRhdGU6bW92aWVzIiwidmlldzphY3RvcnMiLCJ2aWV3Om1vdmllcyJdfQ.R4apdgtBro6x2VTdlJtnSJ6eAvFmlUsX2cJ26hu5YZ6H1rwoi-e_EstY5sbBHfhhoMqkL2s_ch5wOFPuPrk0XrFsK9KgBXCUUJtJARTnPR2KnH-hjmSqfyJZqutdjPN0TSRHPoM8aUs8-d-1K2YgcWudVayGUJPbY8UR_d-fru-xEcFAOtiqh-XoFN6AyT6GDg3jHjbRFb_3hqpUo2b4HYL8_V2FpZT4slSXKN5BqrHdP2IU9WW_jNDm-gr26h1ga8-NdBnJjyJc_p9vGvxjMj6mbD9eBFgLYlehAfY6pkx3ODsrB0uaas5te-qJcyweMZ2VvzqwVfs6kvvKc5rsfg",
+						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlJEZ3pNemd5TlRkRk5EWkdSakZHTVVNMk4wUTBNREF5TlVKQ1JrVXhSRU16UVRBNU9EbEdRZyJ9.eyJpc3MiOiJodHRwczovL2RraHVuZGxleS5hdXRoMC5jb20vIiwic3ViIjoiZ29vZ2xlLW9hdXRoMnwxMDUwNTU1OTY4NzQ1NDA2MzkxNjMiLCJhdWQiOlsiY2FzdGluZyIsImh0dHBzOi8vZGtodW5kbGV5LmF1dGgwLmNvbS91c2VyaW5mbyJdLCJpYXQiOjE1ODQ1NDA5NDgsImV4cCI6MTU4NDYyNzM0OCwiYXpwIjoiWHNGWjhzWnMxYzU2bVp6MVdmbmpjMmc3RXBkOGJJVjIiLCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIGVtYWlsIiwicGVybWlzc2lvbnMiOlsiYWRkOmFjdG9ycyIsImFkZDptb3ZpZXMiLCJkZWxldGU6YWN0b3JzIiwiZGVsZXRlOm1vdmllcyIsInVwZGF0ZTphY3RvcnMiLCJ1cGRhdGU6bW92aWVzIiwidmlldzphY3RvcnMiLCJ2aWV3Om1vdmllcyJdfQ.N6tiQOU0R71M752oxyx9cFiovZ7BkedP49l573qlo_jQJeoF0TP17AFz00tL-qJOroTUErHiBGc7CTGantx7Jg6vgWYTbdVjMYt6Kufg5kO-y2agjm2InfHXdD2ZU8KeSxeIY_o1yAqe9J9gbXXKpc9DC1ouEMq1MSY1Sju9t2xDlOmcECgVDGQ4q5oWNfQ8b9MuvmICbV8BKcxvgjDPL8Ol_J5Uu5FcXMHaJ64UFvJxPS9UwOwr-zQpJV_V-SKKK3jYTIgDg2nrlJUE_Xx3ejwcKbzp2vVspzl-WK5UZ4Lm-6d5HTqwx3KGisEdgW-iBqJDY-7cLx7xVJ0aLrHYUA",
 						"type": "string"
 					}
 				]
@@ -604,6 +664,20 @@
 				}
 			],
 			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "default",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}",
+					"host": [
+						"{{host}}"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"event": [
@@ -630,9 +704,9 @@
 	],
 	"variable": [
 		{
-			"id": "320e317c-baa6-4eb9-ab8d-d117e09c4310",
+			"id": "bc771544-974f-44f2-aeb9-33f728d885cb",
 			"key": "host",
-			"value": "localhost:8080",
+			"value": "https://casting-api.herokuapp.com/",
 			"type": "string"
 		}
 	],
