@@ -26,6 +26,15 @@ def create_app(test_config=None):
         response.headers.add('Access-Control-Allow-Methods', 'GET, PATCH, POST, DELETE, OPTIONS')
         return response
 
+    # Default Endpoint
+    # -------------------------------------------------------------------------
+    @app.route('/', methods = ['GET'])
+    def check_health():
+        return jsonify({
+            'success': True,
+            'description': 'App is running.'
+        })
+
     # GET Endpoints
     # -------------------------------------------------------------------------
 
