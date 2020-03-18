@@ -3,15 +3,12 @@ import os
 from sqlalchemy import Column, String, Integer
 from flask_sqlalchemy import SQLAlchemy
 
-database_name = "casting_test"
-database_path = "postgres://{}/{}".format('localhost:5432', database_name)
-
 # Instantiating database as an SQLAlchemy object
 casting_db = SQLAlchemy()
 
 # Setting up the database for the Flask app
-def setup_db(app, database_path = database_path):
-    app.config["SQLALCHEMY_DATABASE_URI"] = database_path
+def setup_db(app):
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.environ['DATABASE_URL']
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     casting_db.app = app
     casting_db.init_app(app)
