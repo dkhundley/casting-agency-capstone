@@ -1,11 +1,11 @@
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 
-from app import APP
+from app import app
 from models import casting_db
 
-migrate = Migrate(APP, casting_db)
-manager = Manager(APP)
+migrate = Migrate(app, casting_db)
+manager = Manager(app)
 
 manager.add_command('casting_db', MigrateCommand)
 
