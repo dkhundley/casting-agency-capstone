@@ -14,7 +14,7 @@ from models import setup_db, Movie, Actor, casting_db
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__)
-    CORS(app, resources = {r'/api/': {'origins': '*'}})
+    CORS(app, resources={r'/api/': {'origins': '*'}})
 
     # Instantiating the app with the database from the models file
     setup_db(app)
@@ -22,13 +22,17 @@ def create_app(test_config=None):
     # Adding proper header info to response
     @app.after_request
     def after_request(response):
-        response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization, True')
-        response.headers.add('Access-Control-Allow-Methods', 'GET, PATCH, POST, DELETE, OPTIONS')
+        response.headers.add(
+            'Access-Control-Allow-Headers',
+            'Content-Type, Authorization, True')
+        response.headers.add(
+            'Access-Control-Allow-Methods',
+            'GET, PATCH, POST, DELETE, OPTIONS')
         return response
 
     # Default Endpoint
     # -------------------------------------------------------------------------
-    @app.route('/', methods = ['GET'])
+    @app.route('/', methods=['GET'])
     def check_health():
         return jsonify({
             'success': True,
@@ -39,7 +43,7 @@ def create_app(test_config=None):
     # -------------------------------------------------------------------------
 
     # Creating an endpoint to view movie information
-    @app.route('/movies', methods = ['GET'])
+    @app.route('/movies', methods=['GET'])
     @requires_auth('view:movies')
     def get_movies(jwt):
         # Querying all the movies
@@ -47,19 +51,19 @@ def create_app(test_config=None):
 
         # Ensuring results are returned else throwing error
         if not movies:
-          abort(404)
+            abort(404)
 
         # Formatting the returned movie results
         movies = [movie.format() for movie in movies]
 
         # Returining movie information
         return jsonify({
-          'success': True,
-          'movies': movies
+            'success': True,
+            'movies': movies
         })
 
     # Creating an endpoint to view actor information
-    @app.route('/actors', methods = ['GET'])
+    @app.route('/actors', methods=['GET'])
     @requires_auth('view:actors')
     def get_actors(jwt):
         # Querying all the actors
@@ -67,7 +71,7 @@ def create_app(test_config=None):
 
         # Ensuring results are returned else throwing error
         if not actors:
-          abort(404)
+            abort(404)
 
         # Formatting the return actor results
         actors = [actor.format() for actor in actors]
@@ -82,7 +86,7 @@ def create_app(test_config=None):
     # -------------------------------------------------------------------------
 
     # Creating an endpoint to allow a new movie to be added
-    @app.route('/movies/create', methods = ['POST'])
+    @app.route('/movies/create', methods=['POST'])
     @requires_auth('add:movies')
     def add_movie(jwt):
         # Getting information from request body
@@ -98,7 +102,7 @@ def create_app(test_config=None):
 
         try:
             # Adding new movie object with request body info
-            new_movie = Movie(title = title, release_year = release_year)
+            new_movie = Movie(title=title, release_year=release_year)
             new_movie.insert()
 
             # Returning success information
@@ -106,11 +110,11 @@ def create_app(test_config=None):
                 'success': True,
                 'movie_id': new_movie.id,
             })
-        except:
+        except BaseException:
             abort(422)
 
     # Creating an endpoint to allow a new actor to be added
-    @app.route('/actors/create', methods = ['POST'])
+    @app.route('/actors/create', methods=['POST'])
     @requires_auth('add:actors')
     def add_actor(jwt):
         # Getting information from request body
@@ -128,10 +132,10 @@ def create_app(test_config=None):
 
         try:
             # Adding new actor object with request body info
-            actor = Actor(name = name,
-                          age = age,
-                          gender = gender,
-                          movie_id = movie_id)
+            actor = Actor(name=name,
+                          age=age,
+                          gender=gender,
+                          movie_id=movie_id)
             actor.insert()
 
             # Returning success information
@@ -139,14 +143,14 @@ def create_app(test_config=None):
                 'success': True,
                 'actor_id': actor.id
             })
-        except:
+        except BaseException:
             abort(422)
 
     # DELETE Endpoints
     # -------------------------------------------------------------------------
 
     # Creating endpoint to delete a movie by provided movie_id
-    @app.route('/movies/delete/<int:movie_id>', methods = ['DELETE'])
+    @app.route('/movies/delete/<int:movie_id>', methods=['DELETE'])
     @requires_auth('delete:movies')
     def delete_movie(jwt, movie_id):
         # Querying movie by provided movie_id
@@ -162,13 +166,13 @@ def create_app(test_config=None):
                     'success': True,
                     'deleted': movie_id
                 })
-            except:
+            except BaseException:
                 abort(422)
         else:
             abort(404)
 
     # Creating endpoint to delete an actor by provided actor_id
-    @app.route('/actors/delete/<int:actor_id>', methods = ['DELETE'])
+    @app.route('/actors/delete/<int:actor_id>', methods=['DELETE'])
     @requires_auth('delete:actors')
     def delete_actor(jwt, actor_id):
         # Querying actor by provided actor_id
@@ -184,7 +188,7 @@ def create_app(test_config=None):
                     'success': True,
                     'deleted': actor_id
                 })
-            except:
+            except BaseException:
                 abort(422)
         else:
             abort(404)
@@ -193,7 +197,7 @@ def create_app(test_config=None):
     # -------------------------------------------------------------------------
 
     # Creating an endpoint to update information about a specific movie
-    @app.route('/movies/update/<int:movie_id>', methods = ['PATCH'])
+    @app.route('/movies/update/<int:movie_id>', methods=['PATCH'])
     @requires_auth('update:movies')
     def update_movie(jwt, movie_id):
         # Querying movie by provided movie_id
@@ -209,7 +213,8 @@ def create_app(test_config=None):
                 title = body.get('title')
                 release_year = body.get('release_year')
 
-                # Updating movie information if new attribute information is present
+                # Updating movie information if new attribute information is
+                # present
                 if title:
                     movie.title = title
                 if release_year:
@@ -224,15 +229,14 @@ def create_app(test_config=None):
                     'movie_id': movie.id
                 })
             # Raising exception if error updating movie
-            except:
+            except BaseException:
                 abort(422)
         # Raising exception if movie could not be found
         else:
             abort(404)
 
-
     # Creating an endpoint to update actor information with new attribute info
-    @app.route('/actors/update/<int:actor_id>', methods = ['PATCH'])
+    @app.route('/actors/update/<int:actor_id>', methods=['PATCH'])
     @requires_auth('update:actors')
     def update_actors(jwt, actor_id):
         # Querying actor by provided actor_id
@@ -250,7 +254,8 @@ def create_app(test_config=None):
                 gender = body.get('gender')
                 movie_id = body.get('movie_id')
 
-                # Updating actor information if new attribute information is present
+                # Updating actor information if new attribute information is
+                # present
                 if name:
                     actor.name = name
                 if age:
@@ -269,7 +274,7 @@ def create_app(test_config=None):
                     'actor_id': actor.id
                 })
             # Raising exception if error updating actor
-            except:
+            except BaseException:
                 abort(422)
         # Raising exception if actor could not be found
         else:
@@ -280,18 +285,18 @@ def create_app(test_config=None):
     @app.errorhandler(422)
     def unprocessable(error):
         return jsonify({
-                        "success": False,
-                        "error": 422,
-                        "message": "unprocessable"
-                        }), 422
+            "success": False,
+            "error": 422,
+            "message": "unprocessable"
+        }), 422
 
     @app.errorhandler(404)
     def not_found(error):
         return jsonify({
-                        "success": False,
-                        "error": 404,
-                        "message": "not found"
-                        }), 404
+            "success": False,
+            "error": 404,
+            "message": "not found"
+        }), 404
 
     @app.errorhandler(AuthError)
     def handle_auth_errors(x):
@@ -302,6 +307,7 @@ def create_app(test_config=None):
         }), 401
 
     return app
+
 
 # Creating the Flask application
 app = create_app()
