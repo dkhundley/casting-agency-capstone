@@ -30,7 +30,7 @@ Before moving into how the API functions, it is good to know the data models sup
 - **gender**: String value
 - **movie_id**: Integer value that denotes foreign key relationship to ```id``` field in ```movies``` table
 
-## Auth0 Roles, Permissions, and Active Tokens
+## Auth0 Roles, Permissions, and More
 
 Within Auth0, we have established 3 high level roles and have associated different permissions for each role. Each role is progressive in the sense that a "higher" level role inherits all the permissions from a lower level one.
 
@@ -46,6 +46,11 @@ Here are the roles and permissions as defined in Auth0:
 - **Executive Producer**: Finally, our highest tier role contains all permissions from the roles already defined above as well as gains a few new permissions around deleting resources. These specific permissions are...
   - ```delete:movies```
   - ```delele:actors```
+
+### Auth0 Account Setup
+If you would like to setup your own account with my Auth0 instance, you can do so at the URL below. However, please note that this isn't much good for you unless add one of the respective roles above to your account. (I'm not sure how to do this in an automated fashion; this seems out of scope for this project.)
+
+Auth0 URL: [https://dkhundley.auth0.com/authorize?audience=casting&response_type=token&client_id=XsFZ8sZs1c56mZz1Wfnjc2g7Epd8bIV2&redirect_uri=http://127.0.0.1:8080/login-results](https://dkhundley.auth0.com/authorize?audience=casting&response_type=token&client_id=XsFZ8sZs1c56mZz1Wfnjc2g7Epd8bIV2&redirect_uri=http://127.0.0.1:8080/login-results)
 
 ### Active Tokens
 As of today (3/18/2020), I have generated a handful of tokens associated to each of the roles mentioned above. These tokens are also included in the Postman documentation and should be valid for the next few days. These tokens are as followed:
